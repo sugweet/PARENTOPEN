@@ -4,8 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Map;
-
 /**
  * @Description
  * @Author Sugweet
@@ -16,9 +14,8 @@ import java.util.Map;
 public class LoginController {
 
     @GetMapping(value = "/login")
-    public String login(Map<String,Object> model) {
-        model.put("name", "hello world");
-        return "hello";
+    public String login() {
+        return null;
     }
 
 }
