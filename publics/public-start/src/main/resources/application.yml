@@ -1,0 +1,25 @@
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/openbeauty?characterEncoding=utf8&roundRobinLoadBalance=true&useUnicode=true
+    username: root
+    password: root
+  profiles:
+    active: mysql
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    #open-in-view: false  #默认开启，开启可以在控制台看到数据库查询情况
+  thymeleaf:
+    cache: false
+    mode: HTML5
