@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8091
   tomcat:
     uri-encoding: UTF-8
 spring:
@@ -19,7 +19,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
-    #open-in-view: false  #默认开启，开启可以在控制台看到数据库查询情况
+        #open-in-view: false  #默认开启，开启可以在控制台看到数据库查询情况
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+
   thymeleaf:
     cache: false
     mode: LEGACYHTML5
