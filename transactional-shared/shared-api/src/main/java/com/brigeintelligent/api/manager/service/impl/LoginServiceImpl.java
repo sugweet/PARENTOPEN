@@ -1,6 +1,5 @@
 package com.brigeintelligent.api.manager.service.impl;
 
-import com.brigeintelligent.api.manager.dao.RoleDao;
 import com.brigeintelligent.api.manager.dao.UserDao;
 import com.brigeintelligent.api.manager.entity.Permission;
 import com.brigeintelligent.api.manager.entity.Role;
@@ -8,16 +7,19 @@ import com.brigeintelligent.api.manager.entity.User;
 import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.utils.IDGetGenerator;
 import com.brigeintelligent.api.utils.PasswordUtils;
+import com.brigeintelligent.base.BaseCode;
+import com.brigeintelligent.base.BaseException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @Description：用户登录接口
@@ -28,12 +30,13 @@ import java.util.Optional;
 public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private RoleDao roleDao;
 
     @Override
     @Transactional
     public User addUser(User user) {
+        if (usernameExist(user.getUsername(), user.getId())) {
+            throw new BaseException(BaseCode.FAILED, "用户名已存在");
+        }
         if (StringUtils.isEmpty(user.getId())) {
             // id为空说明是新增
             user.setId(IDGetGenerator.gen());
@@ -53,6 +56,22 @@ public class LoginServiceImpl implements LoginService {
                 user.setPassword(PasswordUtils.passwordEncode(password1));
             } else {
                 user.setPassword(user1.get().getPassword());
+            }
+        }
+        Set<Role> roles = user.getRoles();
+        if (!CollectionUtils.isEmpty(roles)) {
+            for (Role role : roles) {
+                if (StringUtils.isEmpty(role.getRoleId())) {
+                    role.setRoleId(IDGetGenerator.gen());
+                }
+                List<Permission> permissions = role.getPermissions();
+                if (!CollectionUtils.isEmpty(permissions)) {
+                    for (Permission permission : permissions) {
+                        if (StringUtils.isEmpty(permission.getPermissionId())) {
+                            permission.setPermissionId(IDGetGenerator.gen());
+                        }
+                    }
+                }
             }
         }
 
@@ -87,21 +106,24 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    @Transactional
-    @SuppressWarnings("unchecked")
-    public Role addRole(Map<String, Object> map) {
-        Role role = new Role();
-        role.setRoleId(IDGetGenerator.gen());
-        role.setRoleName(map.get("roleName").toString());
-        role.setDescription(map.get("description").toString());
-        List<Permission> permissions = (List<Permission>) map.get("permissions");
-        role.setPermissions(permissions);
-        return roleDao.save(role);
+    public User findUserByUserName(String username) {
+        return userDao.findUserByUsername(username);
     }
 
     @Override
-    public User findUserByUserName(String username) {
-       return userDao.findUserByUsername(username);
+    public Boolean usernameExist(String username, String id) {
+        User user = null;
+        if (StringUtils.isEmpty(id)) {
+            // 如果id为null，说明是新增校验
+            user = userDao.findUserByUsername(username);
+            // 返回true说明用户名重复
+        } else {
+            // 如果id不为空，说明是修改校验
+            user = userDao.findByUsernameAndIdNot(username, id);
+            // 返回true说明用户名重复
+        }
+        return user != null;
+
     }
 
 }

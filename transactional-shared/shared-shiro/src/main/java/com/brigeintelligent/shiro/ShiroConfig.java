@@ -186,6 +186,7 @@ public class ShiroConfig {
 
         // 登录页面放行
         map.put("/api/login", "anon");
+        //map.put("/api/addUser", "anon");
         // swagger页面放行
         map.put("/swagger/**", "anon");
         // 对所有用户认证

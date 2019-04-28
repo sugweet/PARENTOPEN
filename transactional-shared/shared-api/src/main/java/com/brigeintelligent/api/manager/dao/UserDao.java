@@ -8,5 +8,9 @@ import org.springframework.stereotype.Repository;
 public interface UserDao extends BaseDao<User,String> {
     User findUserByUsername(String username);
 
+    User findByUsernameAndIdNot(String username, String id);
+
     int deleteByUsername(String username);
+
+
 }
