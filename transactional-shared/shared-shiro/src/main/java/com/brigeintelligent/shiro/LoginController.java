@@ -4,8 +4,8 @@ import com.brigeintelligent.api.manager.entity.LoginResp;
 import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
 import com.brigeintelligent.api.manager.service.LoginService;
-import com.brigeintelligent.api.shiro.realm.ShiroToken;
-import com.brigeintelligent.api.shiro.realm.ShiroUtils;
+import com.brigeintelligent.api.shiro.ShiroToken;
+import com.brigeintelligent.api.shiro.ShiroUtils;
 import com.brigeintelligent.base.BaseCode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -110,7 +110,6 @@ public class LoginController {
 
     // 查询所有用户
     @GetMapping(value = "/findAll")
-    @RequiresPermissions("select")
     public List<User> findAll() {
         return loginService.findAll();
     }

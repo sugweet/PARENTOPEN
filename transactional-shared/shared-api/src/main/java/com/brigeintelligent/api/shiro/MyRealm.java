@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.shiro.realm;
+package com.brigeintelligent.api.shiro;
 
 import com.brigeintelligent.api.manager.entity.Permission;
 import com.brigeintelligent.api.manager.entity.Role;

@@ -21,9 +21,9 @@ public class MyAccessController extends FormAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
         String path = req.getRequestURI();
-        // 加一个集合，放行集合里所有的url
+        // 加一个集合，放行集合里所有的url,使其未登录也能访问
         List<String> noFilters = new ArrayList<>();
-        //noFilters.add("/api/findAll");
+        noFilters.add("/api/findAll");
         if (noFilters.contains(path)) {
             return true;
         }

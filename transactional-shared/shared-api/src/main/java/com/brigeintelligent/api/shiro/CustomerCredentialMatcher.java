@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.shiro.realm;
+package com.brigeintelligent.api.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
