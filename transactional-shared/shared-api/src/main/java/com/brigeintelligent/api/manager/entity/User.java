@@ -25,7 +25,7 @@ public class User implements Serializable {
     @Column(name = "locked",length = 1)
     private Integer locked; //用户是否被锁定
     //用户和角色是多对多关系，MERGE表示增删用户时，对角色只增不删
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
     joinColumns = {@JoinColumn(name = "user_id")},
     inverseJoinColumns = {@JoinColumn(name = "role_id")})

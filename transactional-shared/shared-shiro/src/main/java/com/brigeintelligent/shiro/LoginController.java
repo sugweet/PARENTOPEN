@@ -9,6 +9,7 @@ import com.brigeintelligent.api.shiro.realm.ShiroUtils;
 import com.brigeintelligent.base.BaseCode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class LoginController {
 
     //未授权
     @GetMapping(value = "/403")
+    @ExceptionHandler(value = UnauthorizedException.class) // 如果没有权限就跳转到403界面
     public LoginResp UnauthorizedUrl(){
         LoginResp loginResp = new LoginResp();
         loginResp.setCode(403);
@@ -79,6 +81,7 @@ public class LoginController {
 
     //数据初始化
     @PostMapping(value = "/addUser")
+    @RequiresPermissions("create") // 用户新增必须有新增权限
     public String addUser(@RequestBody User user){
 
         User user1 = loginService.addUser(user);
@@ -87,12 +90,14 @@ public class LoginController {
 
     //角色初始化
     @PostMapping(value = "/addRole")
+    @RequiresPermissions("create") // 用户新增必须有新增权限
     public String addRole(@RequestBody Map<String,Object> map){
         Role role = loginService.addRole(map);
         return "addRole is ok! \n" + role;
     }
 
     // 查询当前用户
+
     @GetMapping(value = "/getCurrent")
     public LoginResp getCurrent() {
         LoginResp loginResp = new LoginResp();
@@ -105,6 +110,7 @@ public class LoginController {
 
     // 查询所有用户
     @GetMapping(value = "/findAll")
+    @RequiresPermissions("select")
     public List<User> findAll() {
         return loginService.findAll();
     }

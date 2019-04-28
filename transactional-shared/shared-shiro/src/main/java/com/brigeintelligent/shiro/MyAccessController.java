@@ -1,8 +1,6 @@
 package com.brigeintelligent.shiro;
 
-import com.brigeintelligent.base.BaseException;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -23,24 +21,23 @@ public class MyAccessController extends FormAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
         String path = req.getRequestURI();
-        System.out.println(path);
         // 加一个集合，放行集合里所有的url
         List<String> noFilters = new ArrayList<>();
-        noFilters.add("/api/findAll");
+        //noFilters.add("/api/findAll");
         if (noFilters.contains(path)) {
             return true;
         }
+        // 如果是登录请求就进行登录校验
         if (isLoginRequest(request, response)) {
             if (isLoginSubmission(request, response)) {
                 return executeLogin(request, response);
             } else {
                 return true;
             }
-        } else {
-            Exception e = new BaseException(600,"未登录");
-            request.setAttribute(DefaultErrorAttributes.class.getName()+".ERROR",e);
-            throw e;
         }
+        //如果未登录，则跳转到noLogin界面
+        return super.onAccessDenied(request, response);
+
     }
 
     @Override

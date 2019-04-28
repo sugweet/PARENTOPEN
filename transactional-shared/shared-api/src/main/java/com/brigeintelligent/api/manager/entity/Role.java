@@ -24,7 +24,7 @@ public class Role implements Serializable {
     @Column(name = "description", length = 128)
     private String description;
     //角色和权限是多对多关系，MERGE表示增删用户时，对角色只增不删
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission",
     joinColumns = {@JoinColumn(name = "role_id")},
     inverseJoinColumns = {@JoinColumn(name = "permission_id")})

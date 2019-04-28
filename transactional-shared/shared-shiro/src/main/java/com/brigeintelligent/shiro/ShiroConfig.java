@@ -66,11 +66,11 @@ public class ShiroConfig {
         Map<String, String> map = new HashMap<>();
         // 登出
         map.put("/api/logout", "logout");
-        // 对所有用户认证
-        map.put("/api/**", "authc");
 
         // 登录页面放行
         map.put("/api/login", "anon");
+        // 对所有用户认证
+        map.put("/**", "authc");
 
         filterBean.setFilterChainDefinitionMap(map);
         return filterBean;

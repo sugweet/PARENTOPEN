@@ -51,6 +51,8 @@ public class LoginServiceImpl implements LoginService {
             //判断密码是否修改
             if (!password.equals(password1)) {
                 user.setPassword(PasswordUtils.passwordEncode(password1));
+            } else {
+                user.setPassword(user1.get().getPassword());
             }
         }
 
