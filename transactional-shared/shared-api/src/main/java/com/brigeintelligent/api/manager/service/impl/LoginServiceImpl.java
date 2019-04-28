@@ -9,6 +9,7 @@ import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.utils.IDGetGenerator;
 import com.brigeintelligent.api.utils.PasswordUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -43,10 +44,11 @@ public class LoginServiceImpl implements LoginService {
             // id不为空说明是更新
             Optional<User> user1 = userDao.findById(user.getId());
             if (!user1.isPresent()) {
-                throw new RuntimeException("用户不存在");
+                throw new UnknownAccountException("用户不存在");
             }
             String password = PasswordUtils.passwordDecode(user1.get().getPassword());
             String password1 = user.getPassword();
+            //判断密码是否修改
             if (!password.equals(password1)) {
                 user.setPassword(PasswordUtils.passwordEncode(password1));
             }
@@ -93,6 +95,11 @@ public class LoginServiceImpl implements LoginService {
         List<Permission> permissions = (List<Permission>) map.get("permissions");
         role.setPermissions(permissions);
         return roleDao.save(role);
+    }
+
+    @Override
+    public User findUserByUserName(String username) {
+       return userDao.findUserByUsername(username);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.manager.dao;
+package com.brigeintelligent.base;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

@@ -1,11 +1,14 @@
 package com.brigeintelligent.shiro;
 
+import com.brigeintelligent.api.manager.entity.LoginResp;
 import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
 import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.shiro.realm.ShiroToken;
 import com.brigeintelligent.api.shiro.realm.ShiroUtils;
+import com.brigeintelligent.base.BaseCode;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,50 +18,63 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description
+ * @Description 用户管理
  * @Author Sugweet
  * @Time 2019/4/17 14:27
  */
 @RestController
-@RequestMapping(value = "api/shiro")
+@RequestMapping(value = "/api")
 public class LoginController {
 
     @Autowired
     private LoginService loginService;
 
-    //退出的时候是get请求，主要是用于退出
-    @GetMapping(value = "/login")
-    public String login() {
-        System.out.println("跳进登陆啦");
-        return "index";
-    }
-
     //post登录
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String login(@RequestBody Map<String,String> map){
-        //添加用户认证信息
-        ShiroToken shiroToken = new ShiroToken(map.get("username"), map.get("password"));
-        SecurityUtils.getSubject().login(shiroToken);
-        User user = ShiroUtils.currUser();
-        System.out.println(user.getUsername());
-        return "login";
-    }
-
-    @RequestMapping(value = "/index")
-    public String index(){
-        return "index";
+    public LoginResp login(String username, String password){
+        LoginResp loginResp = new LoginResp();
+        try {
+            //添加用户认证信息
+            ShiroToken shiroToken = new ShiroToken(username, password);
+            SecurityUtils.getSubject().login(shiroToken);
+            User user = ShiroUtils.currUser();
+            loginResp.setUser(user);
+            loginResp.setCode(BaseCode.SUCEED);
+            loginResp.setMsg("登陆成功");
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            loginResp.setCode(BaseCode.FAILED);
+            loginResp.setMsg(e.getMessage());
+        }
+        return loginResp;
     }
 
     //登出
-    @RequestMapping(value = "/logout")
-    public String logout(){
-        return "logout";
+    @GetMapping(value = "/logout")
+    public LoginResp logout(){
+        LoginResp loginResp = new LoginResp();
+        SecurityUtils.getSubject().logout();
+        loginResp.setCode(BaseCode.SUCEED);
+        loginResp.setMsg("您已安全退出");
+        return loginResp;
     }
 
-    //错误页面展示
-    @RequestMapping(value = "/error",method = RequestMethod.POST)
-    public String error(){
-        return "error ok!";
+    //未登录
+    @GetMapping(value = "/noLogin")
+    public LoginResp noLogin(){
+        LoginResp loginResp = new LoginResp();
+        loginResp.setCode(600);
+        loginResp.setMsg("未登录");
+        return loginResp;
+    }
+
+    //未授权
+    @GetMapping(value = "/403")
+    public LoginResp UnauthorizedUrl(){
+        LoginResp loginResp = new LoginResp();
+        loginResp.setCode(403);
+        loginResp.setMsg("没有权限");
+        return loginResp;
     }
 
     //数据初始化
@@ -74,6 +90,17 @@ public class LoginController {
     public String addRole(@RequestBody Map<String,Object> map){
         Role role = loginService.addRole(map);
         return "addRole is ok! \n" + role;
+    }
+
+    // 查询当前用户
+    @GetMapping(value = "/getCurrent")
+    public LoginResp getCurrent() {
+        LoginResp loginResp = new LoginResp();
+        User user = loginService.findUserByUserName(ShiroUtils.currUser().getUsername());
+        loginResp.setCode(BaseCode.SUCEED);
+        loginResp.setMsg("查询成功");
+        loginResp.setUser(user);
+        return loginResp;
     }
 
     // 查询所有用户

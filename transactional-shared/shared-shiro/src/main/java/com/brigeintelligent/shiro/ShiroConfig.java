@@ -9,7 +9,9 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +22,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Bean(name = "myRealm")
+    @Bean
     public MyRealm getRealm() {
         MyRealm myRealm = new MyRealm();
         myRealm.setCredentialsMatcher(new CustomerCredentialMatcher());
@@ -46,19 +48,30 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean filterBean = new ShiroFilterFactoryBean();
+        //必须设置securityManager
         filterBean.setSecurityManager(securityManager);
+        //设置登录页，如果不设置默认寻找web工程根目录下的login.jsp页面
+        filterBean.setLoginUrl("/api/noLogin");
+        // 登陆成功后跳转的链接
+        filterBean.setSuccessUrl("/api/login");
+        // 未授权页面
+        filterBean.setUnauthorizedUrl("/api/403");
+
+        // 配置拦截
+        Map<String, Filter> filters = new LinkedHashMap<>();
+        Filter accessControlFilter = new MyAccessController();
+        filters.put("authc", accessControlFilter);
+        filterBean.setFilters(filters);
+
         Map<String, String> map = new HashMap<>();
         // 登出
-        map.put("/logout", "logout");
+        map.put("/api/logout", "logout");
         // 对所有用户认证
-        map.put("/**", "authc");
-        map.put("/api/shiro/addUser", "anon");
-        // 登录
-        filterBean.setLoginUrl("/api/shiro/login");
-        // 首页
-        filterBean.setSuccessUrl("/index");
-        // 错误页面，认证不通过跳转
-        filterBean.setUnauthorizedUrl("/error");
+        map.put("/api/**", "authc");
+
+        // 登录页面放行
+        map.put("/api/login", "anon");
+
         filterBean.setFilterChainDefinitionMap(map);
         return filterBean;
     }

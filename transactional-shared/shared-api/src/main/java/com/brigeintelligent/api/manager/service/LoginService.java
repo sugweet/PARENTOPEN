@@ -16,4 +16,6 @@ public interface LoginService {
     List<User> findAll();
 
     Role addRole(Map<String,Object> map);
+
+    User findUserByUserName(String username);
 }

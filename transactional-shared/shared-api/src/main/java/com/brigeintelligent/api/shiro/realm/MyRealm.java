@@ -68,7 +68,7 @@ public class MyRealm extends AuthorizingRealm {
             throw new UnknownAccountException("用户名不存在");
         }
         // 用户存在就判断密码是否正确
-        // 数据库密码
+        // 数据库解密后的密码
         String password = PasswordUtils.passwordDecode(user.getPassword());
         // 页面输入的密码
         String password2 = new String(shiroToken.getPassword());
