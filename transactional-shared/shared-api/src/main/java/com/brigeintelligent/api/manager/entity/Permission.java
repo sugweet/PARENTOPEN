@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "sys_permission")
 public class Permission implements Serializable {
+    private static final long serialVersionUID = 5305012470564269093L;
     @Id
     @Column(name = "permission_id",length = 36)
     private String permissionId;

@@ -1,5 +1,6 @@
 package com.brigeintelligent.api.manager.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,8 +15,10 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "sys_role")
+@ApiModel(value = "Role实体",description = "角色实体对象")
 public class Role implements Serializable {
 
+    private static final long serialVersionUID = -9029430597698064488L;
     @Id
     @Column(name = "role_id",length = 36)
     private String roleId;

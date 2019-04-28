@@ -170,7 +170,7 @@ public class ShiroConfig {
         //设置登录页，如果不设置默认寻找web工程根目录下的login.jsp页面
         filterBean.setLoginUrl("/api/noLogin");
         // 登陆成功后跳转的链接
-        filterBean.setSuccessUrl("/api/login");
+        filterBean.setSuccessUrl("/swagger");
         // 未授权页面
         filterBean.setUnauthorizedUrl("/api/403");
 
@@ -186,8 +186,10 @@ public class ShiroConfig {
 
         // 登录页面放行
         map.put("/api/login", "anon");
+        // swagger页面放行
+        map.put("/swagger/**", "anon");
         // 对所有用户认证
-        map.put("/**", "authc");
+        map.put("/api/**", "authc");
 
         filterBean.setFilterChainDefinitionMap(map);
         return filterBean;

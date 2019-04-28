@@ -1,29 +1,28 @@
 package com.brigeintelligent.shiro;
 
 import com.brigeintelligent.api.manager.entity.LoginResp;
-import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
 import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.shiro.ShiroToken;
 import com.brigeintelligent.api.shiro.ShiroUtils;
 import com.brigeintelligent.base.BaseCode;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description 用户管理
  * @Author Sugweet
  * @Time 2019/4/17 14:27
  */
-@RestController
+@Api(tags = "系统登录接口")
+@RestController("C_LoginController")
 @RequestMapping(value = "/api")
 public class LoginController {
 
@@ -31,6 +30,11 @@ public class LoginController {
     private LoginService loginService;
 
     //post登录
+    @ApiOperation(value = "登录接口",notes = "code:0为成功，否则失败")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query",name = "username",value = "用户名",required = true),
+            @ApiImplicitParam(paramType = "query",name = "password",value = "密码",required = true),
+    })
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public LoginResp login(String username, String password){
         LoginResp loginResp = new LoginResp();
@@ -51,6 +55,7 @@ public class LoginController {
     }
 
     //登出
+    @ApiOperation(value = "退出接口",notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/logout")
     public LoginResp logout(){
         LoginResp loginResp = new LoginResp();
@@ -61,6 +66,7 @@ public class LoginController {
     }
 
     //未登录
+    @ApiOperation(value = "未登录接口",notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/noLogin")
     public LoginResp noLogin(){
         LoginResp loginResp = new LoginResp();
@@ -70,6 +76,7 @@ public class LoginController {
     }
 
     //未授权
+    @ApiOperation(value = "未授权接口",notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/403")
     @ExceptionHandler(value = UnauthorizedException.class) // 如果没有权限就跳转到403界面
     public LoginResp UnauthorizedUrl(){
@@ -80,24 +87,16 @@ public class LoginController {
     }
 
     //数据初始化
+    @ApiOperation(value = "新增用户接口",notes = "code:0为成功，否则失败")
     @PostMapping(value = "/addUser")
     @RequiresPermissions("create") // 用户新增必须有新增权限
-    public String addUser(@RequestBody User user){
+    public String addUser(@RequestBody@ApiParam(name = "用户实体",value = "json格式",required = true) User user){
 
         User user1 = loginService.addUser(user);
         return "addUser is ok! \n" + user1;
     }
 
-    //角色初始化
-    @PostMapping(value = "/addRole")
-    @RequiresPermissions("create") // 用户新增必须有新增权限
-    public String addRole(@RequestBody Map<String,Object> map){
-        Role role = loginService.addRole(map);
-        return "addRole is ok! \n" + role;
-    }
-
     // 查询当前用户
-
     @GetMapping(value = "/getCurrent")
     public LoginResp getCurrent() {
         LoginResp loginResp = new LoginResp();
@@ -114,13 +113,13 @@ public class LoginController {
         return loginService.findAll();
     }
 
-    //注解的使用
+    /*//注解的使用
     @RequiresRoles("admin")
     @RequiresPermissions("create")
-    @RequestMapping(value = "/create")
+    @RequestMapping(value = "/create",method = RequestMethod.POST)
     public String create(){
         return "Create success!";
-    }
+    }*/
 
 
 }
