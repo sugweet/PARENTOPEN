@@ -87,7 +87,7 @@ public class LoginController {
     }
 
     //数据初始化
-    @ApiOperation(value = "新增用户接口", notes = "code:0为成功，否则失败")
+    @ApiOperation(value = "新增/更新用户接口", notes = "code:0为成功，否则失败")
     @PostMapping(value = "/addUser")
     @RequiresPermissions("create") // 用户新增必须有新增权限
     public String addUser(@RequestBody @ApiParam(name = "用户实体", value = "json格式", required = true) User user) {
