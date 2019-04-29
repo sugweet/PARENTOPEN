@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/publics" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/publics/public-base" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/publics/public-dependencies" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/publics/public-start" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transactional-shared" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transactional-shared/shared-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transactional-shared/shared-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transactional-shared/shared-shiro" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/transactional-shared/shared-swagger" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
