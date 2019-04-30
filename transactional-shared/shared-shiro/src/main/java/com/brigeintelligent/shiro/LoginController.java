@@ -14,9 +14,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description 用户管理
@@ -45,9 +43,7 @@ public class LoginController {
             ShiroToken shiroToken = new ShiroToken(username, password);
             SecurityUtils.getSubject().login(shiroToken);
             User user = ShiroUtils.currUser();
-            Map<String, Object> result = new HashMap<>();
-            result.put("result",user);
-            loginResp.setResult(result);
+            loginResp.setResult(user);
             loginResp.setCode(BaseCode.SUCEED);
             loginResp.setMsg("登陆成功");
         } catch (AuthenticationException e) {
@@ -108,9 +104,7 @@ public class LoginController {
         User user = loginService.findUserByUserName(ShiroUtils.currUser().getUsername());
         loginResp.setCode(BaseCode.SUCEED);
         loginResp.setMsg("查询成功");
-        Map<String, Object> result = new HashMap<>();
-        result.put("result",user);
-        loginResp.setResult(result);
+        loginResp.setResult(user);
         return loginResp;
     }
 
@@ -137,9 +131,14 @@ public class LoginController {
     // 查询所有用户
     @ApiOperation(value = "查询所有用户接口", notes = "返回结果集合")
     @GetMapping(value = "/findAll")
-    public List<User> findAll() {
+    public BaseRespons findAll() {
+        BaseRespons loginResp = new BaseRespons();
+        List<User> users = loginService.findAll();
+        loginResp.setCode(BaseCode.SUCEED);
+        loginResp.setMsg("查询成功");
+        loginResp.setResult(users);
+        return loginResp;
 
-        return loginService.findAll();
     }
 
     /*//注解的使用
