@@ -29,7 +29,9 @@ spring:
     cache: false
     mode: LEGACYHTML5
     #配置html页面静态资源路径,以后用Nginx代理获取
-    prefix: classpath:/templates/
-    #配置js、css资源路径，以后用Nginx代理获取
+    prefix: classpath:/static/
   resources:
     static-locations: classpath:/static/
+logging:
+  path: /logs/parent/log
+  file: spring.log
