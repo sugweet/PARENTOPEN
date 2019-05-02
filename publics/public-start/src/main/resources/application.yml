@@ -2,6 +2,9 @@ server:
   port: 8091
   tomcat:
     uri-encoding: UTF-8
+logging:
+  path: /home/parent/logs
+  file: spring.log
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -30,8 +33,12 @@ spring:
     mode: LEGACYHTML5
     #配置html页面静态资源路径,以后用Nginx代理获取
     prefix: classpath:/static/
+
+    servlet:
+      content-type: text/html
+
+  mvc:
+    static-path-pattern: /**
+  #配置js、css资源路径，以后用Nginx代理获取
   resources:
     static-locations: classpath:/static/
-logging:
-  path: /logs/parent/log
-  file: spring.log

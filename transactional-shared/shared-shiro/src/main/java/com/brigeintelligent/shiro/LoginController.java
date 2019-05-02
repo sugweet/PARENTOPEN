@@ -1,11 +1,11 @@
 package com.brigeintelligent.shiro;
 
-import com.brigeintelligent.api.manager.entity.LoginResp;
 import com.brigeintelligent.api.manager.entity.User;
 import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.shiro.ShiroToken;
 import com.brigeintelligent.api.shiro.ShiroUtils;
 import com.brigeintelligent.base.BaseCode;
+import com.brigeintelligent.base.BaseRespons;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -36,14 +36,14 @@ public class LoginController {
             @ApiImplicitParam(paramType = "query", name = "password", value = "密码", required = true),
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public LoginResp login(String username, String password) {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons login(String username, String password) {
+        BaseRespons loginResp = new BaseRespons();
         try {
             //添加用户认证信息
             ShiroToken shiroToken = new ShiroToken(username, password);
             SecurityUtils.getSubject().login(shiroToken);
             User user = ShiroUtils.currUser();
-            loginResp.setUser(user);
+            loginResp.setResult(user);
             loginResp.setCode(BaseCode.SUCEED);
             loginResp.setMsg("登陆成功");
         } catch (AuthenticationException e) {
@@ -57,8 +57,8 @@ public class LoginController {
     //登出
     @ApiOperation(value = "退出接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/logout")
-    public LoginResp logout() {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons logout() {
+        BaseRespons loginResp = new BaseRespons();
         SecurityUtils.getSubject().logout();
         loginResp.setCode(BaseCode.SUCEED);
         loginResp.setMsg("您已安全退出");
@@ -68,8 +68,8 @@ public class LoginController {
     //未登录
     @ApiOperation(value = "未登录接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/noLogin")
-    public LoginResp noLogin() {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons noLogin() {
+        BaseRespons loginResp = new BaseRespons();
         loginResp.setCode(600);
         loginResp.setMsg("未登录");
         return loginResp;
@@ -79,8 +79,8 @@ public class LoginController {
     @ApiOperation(value = "未授权接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/403")
     @ExceptionHandler(value = UnauthorizedException.class) // 如果没有权限就跳转到403界面
-    public LoginResp UnauthorizedUrl() {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons UnauthorizedUrl() {
+        BaseRespons loginResp = new BaseRespons();
         loginResp.setCode(403);
         loginResp.setMsg("没有权限");
         return loginResp;
@@ -99,12 +99,12 @@ public class LoginController {
     // 查询当前用户
     @ApiOperation(value = "查询当前用户接口", notes = "code:0为成功，否则失败")
     @GetMapping(value = "/getCurrent")
-    public LoginResp getCurrent() {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons getCurrent() {
+        BaseRespons loginResp = new BaseRespons();
         User user = loginService.findUserByUserName(ShiroUtils.currUser().getUsername());
         loginResp.setCode(BaseCode.SUCEED);
         loginResp.setMsg("查询成功");
-        loginResp.setUser(user);
+        loginResp.setResult(user);
         return loginResp;
     }
 
@@ -115,8 +115,8 @@ public class LoginController {
             @ApiImplicitParam(paramType = "query", name = "id", value = "用户id", required = false),
     })
     @GetMapping(value = "/usernameExist")
-    public LoginResp usernameExist(String username, String id) {
-        LoginResp loginResp = new LoginResp();
+    public BaseRespons usernameExist(String username, String id) {
+        BaseRespons loginResp = new BaseRespons();
         Boolean usernameExist = loginService.usernameExist(username, id);
         if (usernameExist) {
             loginResp.setCode(BaseCode.FAILED);
@@ -131,9 +131,14 @@ public class LoginController {
     // 查询所有用户
     @ApiOperation(value = "查询所有用户接口", notes = "返回结果集合")
     @GetMapping(value = "/findAll")
-    public List<User> findAll() {
+    public BaseRespons findAll() {
+        BaseRespons loginResp = new BaseRespons();
+        List<User> users = loginService.findAll();
+        loginResp.setCode(BaseCode.SUCEED);
+        loginResp.setMsg("查询成功");
+        loginResp.setResult(users);
+        return loginResp;
 
-        return loginService.findAll();
     }
 
     /*//注解的使用

@@ -18,4 +18,5 @@ public class BaseRespons implements Serializable {
 
     private Integer code = BaseCode.FAILED;
     private String msg = null;
+    private Object result = null;
 }

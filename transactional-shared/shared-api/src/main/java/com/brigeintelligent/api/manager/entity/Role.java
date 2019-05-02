@@ -1,6 +1,7 @@
 package com.brigeintelligent.api.manager.entity;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,12 +22,16 @@ public class Role implements Serializable {
     private static final long serialVersionUID = -9029430597698064488L;
     @Id
     @Column(name = "role_id",length = 36)
+    @ApiModelProperty(value = "角色ID",name = "roleId",required = false)
     private String roleId;
     @Column(name = "role_name",length = 64)
+    @ApiModelProperty(value = "角色名",name = "roleName",required = false)
     private String roleName;
     @Column(name = "description", length = 128)
+    @ApiModelProperty(value = "描述",name = "description",required = false)
     private String description;
     //角色和权限是多对多关系，MERGE表示增删用户时，对角色只增不删
+    @ApiModelProperty(value = "角色下的权限",name = "permissions",required = false)
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission",
     joinColumns = {@JoinColumn(name = "role_id")},
