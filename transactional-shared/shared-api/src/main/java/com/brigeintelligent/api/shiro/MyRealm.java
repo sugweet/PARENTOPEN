@@ -1,9 +1,9 @@
 package com.brigeintelligent.api.shiro;
 
+import com.brigeintelligent.api.manager.dao.UserDao;
 import com.brigeintelligent.api.manager.entity.Permission;
 import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
-import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.utils.PasswordUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class MyRealm extends AuthorizingRealm {
     @Autowired
-    private LoginService loginService;
+    private UserDao userDao;
 
     /**
      * 角色和对应权限添加
@@ -36,7 +36,7 @@ public class MyRealm extends AuthorizingRealm {
         // 获取登录用户名
         String username = (String) principalCollection.getPrimaryPrincipal();
         // 根据用户名查询用户
-        User user = loginService.findByUsernameAndId(username, null);
+        User user = userDao.findUserByUsernameAndId(username, null);
         // 添加角色和权限
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         for (Role role : user.getRoles()) {
@@ -63,7 +63,7 @@ public class MyRealm extends AuthorizingRealm {
         // 获取用户名
         String username = shiroToken.getUsername();
         // 根据用户实名查询用户
-        User user = loginService.findByUsernameAndId(username, null);
+        User user = userDao.findUserByUsernameAndId(username, null);
         if (user == null) {
             throw new UnknownAccountException("用户名不存在");
         }

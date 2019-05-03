@@ -1,14 +1,14 @@
-package com.brigeintelligent.api.manager.service.impl;
+package com.brigeintelligent.service.loginService.impl;
 
 import com.brigeintelligent.api.manager.dao.UserDao;
 import com.brigeintelligent.api.manager.entity.Permission;
 import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
-import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.utils.IDGetGenerator;
 import com.brigeintelligent.api.utils.PasswordUtils;
 import com.brigeintelligent.base.BaseCode;
 import com.brigeintelligent.base.BaseException;
+import com.brigeintelligent.service.loginService.LoginService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.util.CollectionUtils;

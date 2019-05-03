@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.manager.service;
+package com.brigeintelligent.service.loginService;
 
 import com.brigeintelligent.api.manager.entity.User;
 

@@ -1,11 +1,11 @@
 package com.brigeintelligent.shiro;
 
 import com.brigeintelligent.api.manager.entity.User;
-import com.brigeintelligent.api.manager.service.LoginService;
 import com.brigeintelligent.api.shiro.ShiroToken;
 import com.brigeintelligent.api.shiro.ShiroUtils;
 import com.brigeintelligent.base.BaseCode;
-import com.brigeintelligent.base.BaseRespons;
+import com.brigeintelligent.base.BaseResponse;
+import com.brigeintelligent.service.loginService.LoginService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -36,16 +36,16 @@ public class LoginController {
             @ApiImplicitParam(paramType = "query", name = "password", value = "密码", required = true),
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public BaseRespons login(String username, String password) {
-        BaseRespons loginResp = new BaseRespons();
+    public BaseResponse login(String username, String password) {
+        BaseResponse loginResp = new BaseResponse();
         try {
             //添加用户认证信息
             ShiroToken shiroToken = new ShiroToken(username, password);
             SecurityUtils.getSubject().login(shiroToken);
             User user = ShiroUtils.currUser();
-            loginResp.setResult(user);
+            loginResp.setFlag(true);
             loginResp.setCode(BaseCode.SUCEED);
-            loginResp.setMsg("登陆成功");
+            loginResp.setMsg(user);
         } catch (AuthenticationException e) {
             e.printStackTrace();
             loginResp.setCode(BaseCode.FAILED);
@@ -57,54 +57,51 @@ public class LoginController {
     //登出
     @ApiOperation(value = "退出接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/logout")
-    public BaseRespons logout() {
-        BaseRespons loginResp = new BaseRespons();
+    public BaseResponse logout() {
         SecurityUtils.getSubject().logout();
-        loginResp.setCode(BaseCode.SUCEED);
-        loginResp.setMsg("您已安全退出");
-        return loginResp;
+        return new BaseResponse(BaseCode.SUCEED,"您已安全退出");
     }
 
     //未登录
     @ApiOperation(value = "未登录接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/noLogin")
-    public BaseRespons noLogin() {
-        BaseRespons loginResp = new BaseRespons();
-        loginResp.setCode(600);
-        loginResp.setMsg("未登录");
-        return loginResp;
+    public BaseResponse noLogin() {
+
+        return new BaseResponse(600,"您未登录");
     }
 
     //未授权
     @ApiOperation(value = "未授权接口", notes = "code：0表示成功，否则失败")
     @GetMapping(value = "/403")
     @ExceptionHandler(value = UnauthorizedException.class) // 如果没有权限就跳转到403界面
-    public BaseRespons UnauthorizedUrl() {
-        BaseRespons loginResp = new BaseRespons();
-        loginResp.setCode(403);
-        loginResp.setMsg("没有权限");
-        return loginResp;
+    public BaseResponse UnauthorizedUrl() {
+
+        return new BaseResponse(403,"没有权限");
     }
 
     //数据初始化
     @ApiOperation(value = "新增/更新用户接口", notes = "code:0为成功，否则失败")
     @PostMapping(value = "/addUser")
     @RequiresPermissions("create") // 用户新增必须有新增权限
-    public String addUser(@RequestBody @ApiParam(name = "用户实体", value = "json格式", required = true) User user) {
+    public BaseResponse addUser(@RequestBody @ApiParam(name = "用户实体", value = "json格式", required = true) User user) {
 
         User user1 = loginService.addUser(user);
-        return "addUser is ok! \n" + user1;
+        if (user1 != null) {
+
+            return new BaseResponse(BaseCode.SUCEED,"新增/更新成功");
+        }
+        return new BaseResponse(BaseCode.FAILED, "新增/更新失败");
     }
 
     // 查询当前用户
     @ApiOperation(value = "查询当前用户接口", notes = "code:0为成功，否则失败")
     @GetMapping(value = "/getCurrent")
-    public BaseRespons getCurrent() {
-        BaseRespons loginResp = new BaseRespons();
+    public BaseResponse getCurrent() {
+        BaseResponse loginResp = new BaseResponse();
         User user = loginService.findUserByUserName(ShiroUtils.currUser().getUsername());
+        loginResp.setFlag(true);
         loginResp.setCode(BaseCode.SUCEED);
-        loginResp.setMsg("查询成功");
-        loginResp.setResult(user);
+        loginResp.setMsg(user);
         return loginResp;
     }
 
@@ -115,13 +112,15 @@ public class LoginController {
             @ApiImplicitParam(paramType = "query", name = "id", value = "用户id", required = false),
     })
     @GetMapping(value = "/usernameExist")
-    public BaseRespons usernameExist(String username, String id) {
-        BaseRespons loginResp = new BaseRespons();
+    public BaseResponse usernameExist(String username, String id) {
+        BaseResponse loginResp = new BaseResponse();
         Boolean usernameExist = loginService.usernameExist(username, id);
         if (usernameExist) {
+            loginResp.setFlag(false);
             loginResp.setCode(BaseCode.FAILED);
             loginResp.setMsg("用户名重复");
         } else {
+            loginResp.setFlag(true);
             loginResp.setCode(BaseCode.SUCEED);
             loginResp.setMsg("用户名可用");
         }
@@ -131,12 +130,12 @@ public class LoginController {
     // 查询所有用户
     @ApiOperation(value = "查询所有用户接口", notes = "返回结果集合")
     @GetMapping(value = "/findAll")
-    public BaseRespons findAll() {
-        BaseRespons loginResp = new BaseRespons();
+    public BaseResponse findAll() {
+        BaseResponse loginResp = new BaseResponse();
         List<User> users = loginService.findAll();
+        loginResp.setFlag(true);
         loginResp.setCode(BaseCode.SUCEED);
-        loginResp.setMsg("查询成功");
-        loginResp.setResult(users);
+        loginResp.setMsg(users);
         return loginResp;
 
     }
