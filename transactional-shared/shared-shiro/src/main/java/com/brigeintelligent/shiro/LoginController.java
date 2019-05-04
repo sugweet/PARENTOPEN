@@ -14,6 +14,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,7 +62,7 @@ public class LoginController {
     @GetMapping(value = "/logout")
     public BaseResponse logout() {
         SecurityUtils.getSubject().logout();
-        return new BaseResponse(BaseCode.SUCEED,"您已安全退出");
+        return new BaseResponse(BaseCode.SUCEED, "您已安全退出");
     }
 
     //未登录
@@ -67,7 +70,7 @@ public class LoginController {
     @GetMapping(value = "/noLogin")
     public BaseResponse noLogin() {
 
-        return new BaseResponse(600,"您未登录");
+        return new BaseResponse(600, "您未登录");
     }
 
     //未授权
@@ -76,7 +79,7 @@ public class LoginController {
     @ExceptionHandler(value = UnauthorizedException.class) // 如果没有权限就跳转到403界面
     public BaseResponse UnauthorizedUrl() {
 
-        return new BaseResponse(403,"没有权限");
+        return new BaseResponse(403, "没有权限");
     }
 
     //数据初始化
@@ -88,7 +91,7 @@ public class LoginController {
         User user1 = loginService.addUser(user);
         if (user1 != null) {
 
-            return new BaseResponse(BaseCode.SUCEED,"新增/更新成功");
+            return new BaseResponse(BaseCode.SUCEED, "新增/更新成功");
         }
         return new BaseResponse(BaseCode.FAILED, "新增/更新失败");
     }
@@ -147,5 +150,47 @@ public class LoginController {
     public String create(){
         return "Create success!";
     }*/
+
+    public static void main(String[] args) throws Exception {
+        String s = "2019-05-03 00:49:33:033";
+
+        // 创建时间类
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:sss");
+
+        // 上次签到时间
+        Date lastdate = dateFormat.parse(s);
+
+        long lastdateTime = lastdate.getTime();
+        calendar.setTime(lastdate);
+        // 获取下次可签到时间 例如：签到时间为 5月4号，则下次可签到是5号整点
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) + 1, 0, 0, 0);
+
+        System.out.println("上次签到时间：" + dateFormat.format(lastdate));
+        long nextDateTime = calendar.getTimeInMillis();
+        // 计算上次签到到本次可以签到的最小时间间隔
+        long minTime = nextDateTime - lastdateTime;
+        System.out.println("还差" + minTime / (1000 * 60 * 60) + "小时可以签到");
+        // 计算本次可以签到的最大时间间隔
+        long maxTime = minTime + 24 * 60 * 60 * 1000;
+        System.out.println("还差" + maxTime / (1000 * 60 * 60) + "小时累积签到解除");
+
+        //Date date = new Date(); //当前时间
+        String n = "2019-05-04 23:49:33:033";
+        Date date = dateFormat.parse(n);
+        long currentTime = date.getTime();
+        System.out.println(currentTime - lastdateTime);
+        if (currentTime - lastdateTime < minTime) {
+
+            System.out.println("今天已经签到了哟！签到时间为："+s);
+        } else if (currentTime - lastdateTime > maxTime) {
+            String format = dateFormat.format(date);
+            System.out.println("本次签到不是累计签到了，签到时间为：" + format);
+        } else {
+            String format = dateFormat.format(date);
+            System.out.println("本次可以签到，且是累计签到,签到时间为：" + format);
+        }
+
+    }
 
 }

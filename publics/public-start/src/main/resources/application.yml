@@ -3,7 +3,7 @@ server:
   tomcat:
     uri-encoding: UTF-8
 logging:
-  path: /home/parent/logs
+  path: ./home/parent/logs
   file: spring.log
 spring:
   application:
