@@ -1,7 +1,7 @@
 package com.brigeintelligent.api.manager.dao;
 
 import com.brigeintelligent.api.manager.entity.User;
-import com.brigeintelligent.base.BaseDao;
+import com.brigeintelligent.base.basemethod.BaseDao;
 import org.springframework.stereotype.Repository;
 
 @Repository

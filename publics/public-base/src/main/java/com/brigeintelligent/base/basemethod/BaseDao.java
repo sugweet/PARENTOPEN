@@ -1,4 +1,4 @@
-package com.brigeintelligent.base;
+package com.brigeintelligent.base.basemethod;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

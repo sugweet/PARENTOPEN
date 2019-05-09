@@ -1,4 +1,4 @@
-package com.brigeintelligent.base;
+package com.brigeintelligent.base.basemethod;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

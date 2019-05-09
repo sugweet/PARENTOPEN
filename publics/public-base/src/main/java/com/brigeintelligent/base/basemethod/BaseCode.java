@@ -1,4 +1,4 @@
-package com.brigeintelligent.base;
+package com.brigeintelligent.base.basemethod;
 
 import java.io.Serializable;
 
