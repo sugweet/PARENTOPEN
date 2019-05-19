@@ -63,7 +63,7 @@ public class MyRealm extends AuthorizingRealm {
         // 获取用户名
         String username = shiroToken.getUsername();
         // 根据用户实名查询用户
-        User user = userDao.findUserByUsernameAndId(username, null);
+        User user = userDao.findUserByUsername(username);
         if (user == null) {
             throw new UnknownAccountException("用户名不存在");
         }
