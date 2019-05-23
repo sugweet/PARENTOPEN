@@ -32,11 +32,13 @@ public class LoginController {
     //post登录
     @ApiOperation(value = "登录接口", notes = "code:0为成功，否则失败")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "username", value = "用户名", required = true),
-            @ApiImplicitParam(paramType = "path", name = "password", value = "密码", required = true),
+            @ApiImplicitParam(paramType = "query", name = "username", value = "用户名", dataType = "String", required = true),
+            @ApiImplicitParam(paramType = "query", name = "password", value = "密码", dataType = "String", required = true),
     })
-    @RequestMapping(value = "/login/{username}/{password}", method = RequestMethod.POST)
-    public BaseResponse login(@PathVariable String username,@PathVariable String password) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public BaseResponse login(String username,String password) {
+
+
         BaseResponse loginResp = new BaseResponse();
         try {
             //添加用户认证信息
@@ -108,11 +110,11 @@ public class LoginController {
     // 用户名校验
     @ApiOperation(value = "用户名校验", notes = "code:0为用户名可用，否则用户名重复")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "username", value = "用户名", required = true),
-            @ApiImplicitParam(paramType = "path", name = "id", value = "用户id", required = false),
+            @ApiImplicitParam(paramType = "query", name = "username", value = "用户名", required = true),
+            @ApiImplicitParam(paramType = "query", name = "id", value = "用户id", required = false),
     })
-    @GetMapping(value = "/usernameExist/{username}/{id}")
-    public BaseResponse usernameExist(@PathVariable String username, @PathVariable String id) {
+    @GetMapping(value = "/usernameExist")
+    public BaseResponse usernameExist(String username, String id) {
         BaseResponse loginResp = new BaseResponse();
         Boolean usernameExist = loginService.usernameExist(username, id);
         if (usernameExist) {
@@ -148,4 +150,11 @@ public class LoginController {
         return "Create success!";
     }*/
 
+    public static void main(String[] args) {
+        String s = "varchar(1233)";
+        String[] substring = s.split("\\(");
+        String length = substring[1];
+        length = length.substring(0, length.length() - 1);
+        System.out.println(length);
+    }
 }
