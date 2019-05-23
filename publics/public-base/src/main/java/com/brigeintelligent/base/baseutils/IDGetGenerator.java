@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.utils;
+package com.brigeintelligent.base.baseutils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +10,7 @@ import java.util.UUID;
  * @Time：2019/4/22 14:29
  */
 public class IDGetGenerator {
-    public static final String gen() {
+    public static String gen() {
         return UUID.randomUUID().toString().replaceAll( "-", "" ).toUpperCase();
     }
 

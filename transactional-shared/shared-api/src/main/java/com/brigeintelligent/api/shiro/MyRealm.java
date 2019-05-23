@@ -4,7 +4,7 @@ import com.brigeintelligent.api.manager.dao.UserDao;
 import com.brigeintelligent.api.manager.entity.Permission;
 import com.brigeintelligent.api.manager.entity.Role;
 import com.brigeintelligent.api.manager.entity.User;
-import com.brigeintelligent.api.utils.PasswordUtils;
+import com.brigeintelligent.base.baseutils.PasswordUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

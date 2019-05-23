@@ -1,4 +1,4 @@
-package com.brigeintelligent.api.utils;
+package com.brigeintelligent.base.baseutils;
 
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.crypto.AesCipherService;
