@@ -45,7 +45,12 @@ spring:
     static-locations: classpath:/static/
   #配置redis
   redis:
-    host: http://192.168.16.29:6379
+    #http://192.168.16.29:6379
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password:
+    timeout: 1000
 
 #服务发现客户端配置
 #eureka:
