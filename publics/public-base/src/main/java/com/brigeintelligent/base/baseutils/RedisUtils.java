@@ -418,6 +418,35 @@ public class RedisUtils {
     }
 
     /**
+     * 从左边移除list缓存中的一条数据
+     * @param key
+     * @return
+     */
+    public Object lPop(String key) {
+        try {
+            return redisTemplate.opsForList().leftPop(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 从左边移除list缓存中的一条数据
+     * @param key
+     * @param time 移除集合中左边的元素在等待的时间里，如果超过等待的时间仍没有元素则退出。
+     * @return
+     */
+    public Object lPop(String key,Long time) {
+        try {
+            return redisTemplate.opsForList().leftPop(key,time,TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 获取list缓存的长度
      * @param key
      * @return
@@ -451,7 +480,7 @@ public class RedisUtils {
      * @param value
      * @return
      */
-    public Boolean lSet(String key, Object value) {
+    public Boolean lpush(String key, Object value) {
         try {
             redisTemplate.opsForList().leftPush(key, value);
             return true;
@@ -467,7 +496,7 @@ public class RedisUtils {
      * @param value
      * @return
      */
-    public Boolean lSet(String key, List<Object> value) {
+    public Boolean lpush(String key, List<Object> value) {
         try {
             redisTemplate.opsForList().leftPushAll(key, value);
             return true;
@@ -484,7 +513,7 @@ public class RedisUtils {
      * @param value
      * @return
      */
-    public Boolean lSet(String key, Object value, Long time) {
+    public Boolean lpush(String key, Object value, Long time) {
 
         try {
             redisTemplate.opsForList().leftPush(key, value);
@@ -505,7 +534,7 @@ public class RedisUtils {
      * @param value
      * @return
      */
-    public Boolean lSet(String key, List<Object> value, Long time) {
+    public Boolean lpush(String key, List<Object> value, Long time) {
 
         try {
             redisTemplate.opsForList().leftPushAll(key, value);
