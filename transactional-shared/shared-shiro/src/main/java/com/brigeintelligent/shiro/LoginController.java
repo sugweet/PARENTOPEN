@@ -24,7 +24,7 @@ import java.util.List;
 @Api(tags = "系统登录接口")
 @RestController("C_LoginController")
 @RequestMapping(value = "/api")
-public class LoginController {
+public class LoginController{
 
     @Autowired
     private LoginService loginService;

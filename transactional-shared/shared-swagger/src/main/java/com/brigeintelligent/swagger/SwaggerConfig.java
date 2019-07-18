@@ -18,4 +18,5 @@ public class SwaggerConfig {
     public Docket Shared() {
         return SharedApi.swagger();
     }
+
 }

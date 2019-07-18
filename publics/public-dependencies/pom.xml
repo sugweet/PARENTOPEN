@@ -32,6 +32,13 @@
             <artifactId>shared-swagger</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--Demo-->
+        <dependency>
+            <groupId>com.openbeauty</groupId>
+            <artifactId>transactional-demo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -5,10 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -19,9 +19,8 @@ import java.util.Properties;
  */
 @Slf4j
 public class CodeHintUtils {
-    private static final String LOCATIONS = "codehint.properties";
+    private static final String[] LOCATIONS = {"codehint.properties"};
 
-    //private static CodeHintUtils INSTANCE = new CodeHintUtils();
     private CodeHintUtils() {
     }
 
@@ -34,23 +33,34 @@ public class CodeHintUtils {
         return holder.INSTANCE;
     }
 
-    public String getValues(String key) {
-        Properties properties = new Properties();
+    private static Properties properties = new Properties();
+
+    static {
+        for (String location : LOCATIONS) {
+            loadFile(location);
+        }
+    }
+
+    /**
+     * 读取配置文件
+     * @param location
+     */
+    private static synchronized void loadFile(String location) {
         InputStreamReader is = null;
-        InputStream ras = null;
 
         try {
-            String path = Objects.requireNonNull(CodeHintUtils.class.getClassLoader().getResource(LOCATIONS)).getPath();
+            String path = Objects.requireNonNull(CodeHintUtils.class.getClassLoader().getResource(location)).getPath();
             path = URLDecoder.decode(path, "UTF-8");
             log.info("==========propertiesPath：" + path);
             String[] split = path.split("/");
+            log.info("============split:" + Arrays.toString(split));
             String savePath = "";
             // 服务器中将文件路径改为conf文件夹下
             for (int i = 1; i < split.length; i++) {
                 if (!split[i].equals("core")) {
-                    savePath = "/" + split[i];
+                    savePath += "/" + split[i];
                 } else {
-                    savePath = "/conf/" + LOCATIONS;
+                    savePath += "/conf/" + location;
                     break;
                 }
             }
@@ -58,25 +68,8 @@ public class CodeHintUtils {
             is = new InputStreamReader(new FileInputStream(savePath), StandardCharsets.UTF_8);
 
             properties.load(is);
-
-            String value = properties.getProperty(key);
-
-            String defaultKey = "";
-            if (StringUtils.isEmpty(value)) {
-                log.info("========key：" + key + " 没有对应的提示信息，将使用通用的提示信息");
-                String[] keys = key.split("\\.");
-                defaultKey = keys[0]+".800."+keys[keys.length-1];
-                log.info("=========defaultKey：" + defaultKey);
-                String defValue = properties.getProperty(defaultKey);
-                if (StringUtils.isEmpty(defValue)) {
-                    return properties.getProperty("default.800.0000");
-                }
-                return defValue;
-            }
-            return value;
         } catch (Exception e) {
             log.error("=======获取指定属性文件的属性值异常：", e);
-            return null;
         } finally {
             try {
                 assert is != null;
@@ -84,8 +77,42 @@ public class CodeHintUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //properties.clear();
         }
+    }
+
+    /**
+     * 获取配置文件信息
+     * @param key
+     * @return
+     */
+    public String getValues(String key) {
+        String value = properties.getProperty(key);
+
+        String defaultKey = "";
+        if (StringUtils.isEmpty(value)) {
+            log.info("========key：" + key + " 没有对应的提示信息，将使用通用的提示信息");
+            String[] keys = key.split("\\.");
+            defaultKey = keys[0] + ".800." + keys[keys.length - 1];
+            log.info("=========defaultKey：" + defaultKey);
+            String defValue = properties.getProperty(defaultKey);
+            if (StringUtils.isEmpty(defValue)) {
+                return properties.getProperty("default.800.0000");
+            }
+            return defValue;
+        }
+        return value;
+    }
+
+    /**
+     * 刷新配置文件缓存
+     * @return
+     */
+    public boolean onLoad() {
+        for (String location : LOCATIONS) {
+            loadFile(location);
+
+        }
+        return true;
     }
 
 }
