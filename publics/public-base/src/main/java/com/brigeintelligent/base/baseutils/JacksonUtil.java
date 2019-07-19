@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Description：前端json数据与后端集合格式互转工具类
@@ -78,5 +80,28 @@ public class JacksonUtil {
      */
     public static <T> List<T> jsonToList(String jsonString, Class<T> clazz) {
         return JSONArray.parseArray(jsonString, clazz);
+    }
+
+    /**
+     * json转Set
+     * @param jsonString
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<T> jsonToSet(String jsonString, Class<T> clazz) {
+        List<T> list = JSONArray.parseArray(jsonString, clazz);
+        return new HashSet<>(list);
+
+    }
+
+    /**
+     * set转json
+     * @param set
+     * @param <T>
+     * @return
+     */
+    public static <T> String setToJson(Set<T> set) {
+        return JSON.toJSONString(set);
     }
 }
