@@ -19,7 +19,7 @@ import java.util.Objects;
 @Slf4j
 public class FastDfsUtils {
 
-    private final static String FASTDFS_CONFIG = "fastdfs_client.conf";
+    private final static String FASTDFS_CONFIG = "fastdfs_client.properties";
     private TrackerClient trackerClient = null;
     private TrackerServer trackerServer = null;
     private StorageClient storageClient = null;
