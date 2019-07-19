@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @Description：
+ * @Description：FastDfs工具类
  * @Author：Sugweet
  * @Time：2019/7/19 13:55
  */
