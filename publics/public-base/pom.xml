@@ -10,13 +10,5 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>public-base</artifactId>
-    <dependencies>
-        <!--分布式配置管理平台-->
-        <dependency>
-            <groupId>com.baidu.disconf</groupId>
-            <artifactId>disconf-client</artifactId>
-            <version>2.6.36</version>
-        </dependency>
-    </dependencies>
 
 </project>

@@ -78,12 +78,21 @@
         </dependency>
 
 
+        <!--分布式配置管理平台-->
+        <!-- https://mvnrepository.com/artifact/com.baidu.disconf/disconf-client -->
+        <dependency>
+            <groupId>com.baidu.disconf</groupId>
+            <artifactId>disconf-client</artifactId>
+            <version>2.6.36</version>
+        </dependency>
         <!--引入fastdfs-->
+        <!-- https://mvnrepository.com/artifact/org.csource/fastdfs-client-java -->
         <dependency>
             <groupId>org.csource</groupId>
             <artifactId>fastdfs-client-java</artifactId>
-            <version>1.27</version>
+            <version>1.27-RELEASE</version>
         </dependency>
+
         <!--shiro依赖-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -117,7 +126,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.46</version>
+            <version>1.2.8</version>
         </dependency>
     </dependencies>
 
