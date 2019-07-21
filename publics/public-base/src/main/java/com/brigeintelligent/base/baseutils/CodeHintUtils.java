@@ -3,9 +3,7 @@ package com.brigeintelligent.base.baseutils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -19,7 +17,12 @@ import java.util.Properties;
  */
 @Slf4j
 public class CodeHintUtils {
-    private static final String[] LOCATIONS = {"codehint.properties"};
+    private static final String FILENAME = "codehint.properties";
+
+    private static Properties properties;
+
+    // 最近文件修改时间（毫秒）
+    private static Long lastModified = 0L;
 
     private CodeHintUtils() {
     }
@@ -33,39 +36,23 @@ public class CodeHintUtils {
         return holder.INSTANCE;
     }
 
-    private static Properties properties = new Properties();
 
-    static {
+    /*static {
         for (String location : LOCATIONS) {
             loadFile(location);
         }
-    }
+    }*/
 
     /**
      * 读取配置文件
-     * @param location
+     *
      */
-    private static synchronized void loadFile(String location) {
+    private static synchronized void loadFile() {
+        properties = new Properties();
         InputStreamReader is = null;
-
         try {
-            String path = Objects.requireNonNull(CodeHintUtils.class.getClassLoader().getResource(location)).getPath();
-            path = URLDecoder.decode(path, "UTF-8");
-            log.info("==========propertiesPath：" + path);
-            String[] split = path.split("/");
-            log.info("============split:" + Arrays.toString(split));
-            String savePath = "";
-            // 服务器中将文件路径改为conf文件夹下
-            for (int i = 1; i < split.length; i++) {
-                if (!split[i].equals("core")) {
-                    savePath += "/" + split[i];
-                } else {
-                    savePath += "/conf/" + location;
-                    break;
-                }
-            }
-            log.info("===========savePath：" + savePath);
-            is = new InputStreamReader(new FileInputStream(savePath), StandardCharsets.UTF_8);
+
+            is = new InputStreamReader(new FileInputStream(getFilaPath()), StandardCharsets.UTF_8);
 
             properties.load(is);
         } catch (Exception e) {
@@ -86,8 +73,13 @@ public class CodeHintUtils {
      * @return
      */
     public String getValues(String key) {
-        String value = properties.getProperty(key);
 
+        // 判断是否刷新缓存
+        if (properties == null || isUpdate()) {
+            loadFile();
+        }
+
+        String value = properties.getProperty(key);
         String defaultKey = "";
         if (StringUtils.isEmpty(value)) {
             log.info("========key：" + key + " 没有对应的提示信息，将使用通用的提示信息");
@@ -108,11 +100,55 @@ public class CodeHintUtils {
      * @return
      */
     public boolean onLoad() {
-        for (String location : LOCATIONS) {
-            loadFile(location);
-
-        }
+        loadFile();
         return true;
+    }
+
+    /**
+     * 配置文件放在conf文件夹下，所以要将文件路径进行修改
+     * @return
+     */
+    private static String getFilaPath() {
+        String savePath = "";
+
+        try {
+            String path = Objects.requireNonNull(CodeHintUtils.class.getClassLoader().getResource(FILENAME)).getPath();
+            path = URLDecoder.decode(path, "UTF-8");
+            log.info("==========propertiesPath：" + path);
+            String[] split = path.split("/");
+            log.info("============split:" + Arrays.toString(split));
+
+            // 服务器中将文件路径改为conf文件夹下
+            for (int i = 1; i < split.length; i++) {
+                if (!split[i].equals("core")) {
+                    savePath += "/" + split[i];
+                } else {
+                    savePath += "/conf/" + FILENAME;
+                    break;
+                }
+            }
+            log.info("===========savePath：" + savePath);
+        } catch (UnsupportedEncodingException e) {
+            log.error("===============文件路径解析失败");
+        }
+        return savePath;
+    }
+
+    /**
+     * 判断文件是否修改
+     * @return
+     */
+    private static Boolean isUpdate() {
+        boolean flag = false;
+        File file = new File(getFilaPath());
+        // 判断文件最新修改时间
+        if (file.lastModified() > lastModified) {
+            lastModified = file.lastModified();
+            flag = true;
+            log.info("=============配置文件信息已修改");
+        }
+        return flag;
+
     }
 
 }
