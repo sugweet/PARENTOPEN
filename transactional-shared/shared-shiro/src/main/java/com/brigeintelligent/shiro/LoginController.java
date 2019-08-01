@@ -5,7 +5,7 @@ import com.brigeintelligent.api.shiro.ShiroToken;
 import com.brigeintelligent.api.shiro.ShiroUtils;
 import com.brigeintelligent.base.basemethod.BaseCode;
 import com.brigeintelligent.base.basemethod.BaseResponse;
-import com.brigeintelligent.service.loginService.LoginService;
+import com.brigeintelligent.api.shiro.LoginService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

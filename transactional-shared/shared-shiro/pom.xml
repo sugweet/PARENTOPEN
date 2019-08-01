@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.openbeauty</groupId>
-            <artifactId>shared-service</artifactId>
+            <artifactId>shared-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
