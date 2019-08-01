@@ -19,7 +19,7 @@ import java.util.Objects;
 @Slf4j
 public class FastDfsUtils {
 
-    private final static String FASTDFS_CONFIG = "fastdfs_client.properties";
+    private final static String FASTDFS_CONFIG = "fastdfs_client.conf";
     private TrackerClient trackerClient = null;
     private TrackerServer trackerServer = null;
     private StorageClient storageClient = null;
@@ -43,12 +43,10 @@ public class FastDfsUtils {
                 trackerClient = new TrackerClient(ClientGlobal.g_tracker_group);
             if (trackerServer == null)
                 trackerServer = trackerClient.getConnection();
-            StorageServer storageServer = trackerClient.getStoreStorage(trackerServer);
-            if (storageServer == null) {
-                throw new IllegalStateException("getStoreStorage return null");
-            }
+           // StorageServer storageServer = trackerClient.getStoreStorage(trackerServer);
+            StorageServer storageServer = null;
             if (storageClient == null)
-                storageClient = new StorageClient(trackerServer, storageServer);
+                storageClient = new StorageClient(trackerServer, null);
             return storageClient;
         } catch (Exception e) {
             e.printStackTrace();

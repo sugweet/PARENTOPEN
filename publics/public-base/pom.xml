@@ -11,12 +11,14 @@
 
     <artifactId>public-base</artifactId>
     <dependencies>
-        <!--分布式配置管理平台-->
+        <!--引入fastdfs-->
+        <!-- https://mvnrepository.com/artifact/org.csource/fastdfs-client-java -->
         <dependency>
-            <groupId>com.baidu.disconf</groupId>
-            <artifactId>disconf-client</artifactId>
-            <version>2.6.36</version>
+            <groupId>org.csource</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>1.27</version>
         </dependency>
+
     </dependencies>
 
 </project>
