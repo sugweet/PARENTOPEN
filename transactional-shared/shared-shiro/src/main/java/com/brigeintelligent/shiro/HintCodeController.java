@@ -4,9 +4,7 @@ import com.brigeintelligent.base.basemethod.BaseCode;
 import com.brigeintelligent.base.basemethod.BaseResponse;
 import com.brigeintelligent.base.baseutils.CodeHintUtils;
 import com.brigeintelligent.base.baseutils.FastDfsUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,12 +41,32 @@ public class HintCodeController {
         return values;
     }
 
-    @ApiOperation(value = "fastdfsTest", notes = "字符串")
-    @PostMapping(value = "fastdfs", consumes = "multipart/*", headers = "content-type=multipart/form-data")
-    public String fastdfs(@ApiParam("文件上传测试") MultipartFile file) {
+    @ApiOperation(value = "文件上传测试", notes = "字符串")
+    @PostMapping(value = "downloadFastDfs", consumes = "multipart/*", headers = "content-type=multipart/form-data")
+    public String downloadFastDfs(@ApiParam("文件上传测试") MultipartFile file) {
         FastDfsUtils fastDfsUtils = new FastDfsUtils();
         String uploadByFastDFS = fastDfsUtils.uploadByFastDFS(file);
-        return uploadByFastDFS;
+
+        CodeHintUtils codeHint = CodeHintUtils.getInstance();
+
+        return codeHint.getValues("default.800.fdfsUrl") + uploadByFastDFS;
+    }
+
+    @ApiOperation(value = "删除文件测试", notes = "字符串")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "filePath", value = "文件路径", required = false)
+
+    })
+    @PostMapping(value = "deleteFastDfs")
+    public String deleteFastDfs(String filePath) {
+        FastDfsUtils fastDfsUtils = new FastDfsUtils();
+        FastDfsUtils.PathInfo pathInfo = fastDfsUtils.parseFromUrl(filePath);
+        boolean flag = fastDfsUtils.deleteFile(pathInfo.getGroupName(), pathInfo.getPath());
+
+        if (flag) {
+            return "删除成功";
+        }
+        return "删除失败";
     }
 
 }

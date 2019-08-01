@@ -81,16 +81,36 @@ public class FastDfsUtils {
             PathInfo storePath = parseFromUrl(fullPath);
             return storageClient.download_file(storePath.getGroupName(), storePath.getPath());
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new BaseException(BaseCode.FAILED, e.getMessage());
         }
+    }
+
+    /**
+     * 删除文件
+     * @param groupName
+     * @param fileName
+     * @return
+     */
+    public synchronized boolean deleteFile(String groupName, String fileName) {
+        try {
+            StorageClient storageClient = this.getStorageClient();
+            int i = storageClient.delete_file(groupName, fileName);
+            if (i == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            throw new BaseException(BaseCode.FAILED, e.getMessage());
+        }
+        return false;
     }
 
     /**
      * 解析文件路径
      */
     public PathInfo parseFromUrl(String filePath) {
-        int pos = filePath.indexOf("group");
+        int pos = filePath.indexOf("opengroup");
         String groupAndPath = filePath.substring(pos);
         pos = groupAndPath.indexOf("/");
         String group = groupAndPath.substring(0, pos);
@@ -127,7 +147,7 @@ public class FastDfsUtils {
     /**
      * 封裝fastDfs文件路徑信息
      */
-    class PathInfo {
+    public class PathInfo {
         private String groupName;
         private String path;
 
@@ -136,7 +156,7 @@ public class FastDfsUtils {
             this.path = path;
         }
 
-        private String getGroupName() {
+        public String getGroupName() {
             return groupName;
         }
 
@@ -144,7 +164,7 @@ public class FastDfsUtils {
             this.groupName = groupName;
         }
 
-        private String getPath() {
+        public String getPath() {
             return path;
         }
 
