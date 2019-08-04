@@ -3,8 +3,10 @@ package com.brigeintelligent.shiro;
 import com.brigeintelligent.base.basemethod.BaseCode;
 import com.brigeintelligent.base.basemethod.BaseResponse;
 import com.brigeintelligent.base.baseutils.CodeHintUtils;
-import com.brigeintelligent.base.baseutils.FastDfsUtils;
+
+import com.brigeintelligent.base.baseutils.FdfsUtils;
 import io.swagger.annotations.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController("C_HintCodeController")
 @RequestMapping(value = "/api/")
 public class HintCodeController {
+    @Autowired
+    private FdfsUtils fdfsUtils;
 
     //更新
     @ApiOperation(value = "代码提示刷新接口", notes = "code：0表示成功，否则失败")
@@ -44,12 +48,12 @@ public class HintCodeController {
     @ApiOperation(value = "文件上传测试", notes = "字符串")
     @PostMapping(value = "downloadFastDfs", consumes = "multipart/*", headers = "content-type=multipart/form-data")
     public String downloadFastDfs(@ApiParam("文件上传测试") MultipartFile file) {
-        FastDfsUtils fastDfsUtils = new FastDfsUtils();
-        String uploadByFastDFS = fastDfsUtils.uploadByFastDFS(file);
+
+        String filePath = fdfsUtils.uploadByFastDFS(file);
 
         CodeHintUtils codeHint = CodeHintUtils.getInstance();
 
-        return codeHint.getValues("default.800.fdfsUrl") + uploadByFastDFS;
+        return codeHint.getValues("default.800.fdfsUrl") + filePath;
     }
 
     @ApiOperation(value = "删除文件测试", notes = "字符串")
@@ -59,14 +63,9 @@ public class HintCodeController {
     })
     @PostMapping(value = "deleteFastDfs")
     public String deleteFastDfs(String filePath) {
-        FastDfsUtils fastDfsUtils = new FastDfsUtils();
-        FastDfsUtils.PathInfo pathInfo = fastDfsUtils.parseFromUrl(filePath);
-        boolean flag = fastDfsUtils.deleteFile(pathInfo.getGroupName(), pathInfo.getPath());
+        fdfsUtils.deleteFile(filePath);
 
-        if (flag) {
-            return "删除成功";
-        }
-        return "删除失败";
+        return "删除成功";
     }
 
 }

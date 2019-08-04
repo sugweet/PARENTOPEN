@@ -5,7 +5,7 @@
     <parent>
         <artifactId>publics</artifactId>
         <groupId>com.openbeauty</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.openbeauty</groupId>
             <artifactId>public-dependencies</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0-RELEASE</version>
             <type>pom</type>
         </dependency>
         <!--添加Eureka服务客户端-->
@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>1.9</version>
                 <executions>
                     <execution>
                         <id>make-assembly</id>

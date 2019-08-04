@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <groupId>com.openbeauty</groupId>
     <artifactId>openbeauty</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-RELEASE</version>
     <modules>
         <module>publics</module>
         <module>transactional-shared</module>
@@ -24,9 +25,10 @@
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <swagger2.version>2.9.2</swagger2.version>
-        <shiro.version>1.4.0</shiro.version>
-        <druid.version>1.1.0</druid.version>
+        <fastjson.version>1.2.9</fastjson.version>
+        <swagger2.version>2.8.0</swagger2.version>
+        <shiro.version>1.4.1</shiro.version>
+        <druid.version>1.1.9</druid.version>
     </properties>
     <dependencies>
         <dependency>
@@ -46,11 +48,22 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!--common-lang3-->
+
+        <!--commons-lang3-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <!--common-pool2-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!--<dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io}</version>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,8 +124,9 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.46</version>
+            <version>${fastjson.version}</version>
         </dependency>
+
     </dependencies>
 
     <!--spring-cloud版本控制-->
@@ -128,47 +142,16 @@
         </dependencies>
     </dependencyManagement>
 
-    <!--第三方依赖仓库-->
-    <repositories>
+    <distributionManagement>
+        <!-- 用于上传的仓库 -->
         <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <!-- 这里的id需要和settings.xml中的server的id一致 -->
+            <id>open-nexus</id>
+            <name>Open Nexus</name>
+            <!-- 指定自己私服的地址 -->
+            <url>http://192.168.157.3:8081/repository/open-repository/</url>
         </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <!--第三方插件仓库-->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-
-
+    </distributionManagement>
 
     <build>
         <defaultGoal>compile</defaultGoal>
@@ -182,6 +165,23 @@
                     <target>1.8</target>
                     <encoding>utf-8</encoding>
                 </configuration>
+            </plugin>
+
+            <!-- 要将源码放上去，需要加入这个插件 -->
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 

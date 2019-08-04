@@ -57,3 +57,17 @@ spring:
 #  client:
 #    service-url:
 #      defaultZone: http://localhost:6060/eureka
+
+
+#fastdfs
+fdfs:
+  so-timeout: 30000
+  connect-timeout: 30000
+  thumb-image:
+    height: 300
+    width: 300
+  tracker-list:
+    - 192.168.157.3:22122
+  pool:
+    max-total: 100
+    max-wait-millis: 60

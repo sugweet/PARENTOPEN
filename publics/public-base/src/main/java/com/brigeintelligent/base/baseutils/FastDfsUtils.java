@@ -1,22 +1,11 @@
 package com.brigeintelligent.base.baseutils;
 
-import com.brigeintelligent.base.basemethod.BaseCode;
-import com.brigeintelligent.base.basemethod.BaseException;
-import lombok.extern.slf4j.Slf4j;
-import org.csource.fastdfs.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 /**
  * @Description：FastDfs工具类
  * @Author：Sugweet
  * @Time：2019/7/19 13:55
  */
-@Slf4j
+/*@Slf4j
 public class FastDfsUtils {
 
     private final static String FASTDFS_CONFIG = "fastdfs_client.conf";
@@ -34,9 +23,9 @@ public class FastDfsUtils {
         log.info("ClientGlobal.configInfo(): " + ClientGlobal.configInfo());
     }
 
-    /**
+    *//**
      * 避免文件冲突，每次实例化一个StorageClient
-     */
+     *//*
     private StorageClient getStorageClient() throws BaseException {
         try {
             if (trackerClient == null)
@@ -54,9 +43,9 @@ public class FastDfsUtils {
         }
     }
 
-    /**
+    *//**
      * 向FASTDFS上传文件
-     */
+     *//*
     public synchronized String uploadByFastDFS(MultipartFile file) throws BaseException {
         try {
             StorageClient storageClient = this.getStorageClient();
@@ -72,9 +61,9 @@ public class FastDfsUtils {
         }
     }
 
-    /**
+    *//**
      * 从FASTDFS上下载文件，得到byte数组
-     */
+     *//*
     public synchronized byte[] downloadByFastDFS(String fullPath) throws BaseException {
         try {
             StorageClient storageClient = this.getStorageClient();
@@ -86,12 +75,12 @@ public class FastDfsUtils {
         }
     }
 
-    /**
+    *//**
      * 删除文件
      * @param groupName
      * @param fileName
      * @return
-     */
+     *//*
     public synchronized boolean deleteFile(String groupName, String fileName) {
         try {
             StorageClient storageClient = this.getStorageClient();
@@ -106,9 +95,9 @@ public class FastDfsUtils {
         return false;
     }
 
-    /**
+    *//**
      * 解析文件路径
-     */
+     *//*
     public PathInfo parseFromUrl(String filePath) {
         int pos = filePath.indexOf("opengroup");
         String groupAndPath = filePath.substring(pos);
@@ -144,9 +133,9 @@ public class FastDfsUtils {
         return remap;
     }
 
-    /**
+    *//**
      * 封裝fastDfs文件路徑信息
-     */
+     *//*
     public class PathInfo {
         private String groupName;
         private String path;
@@ -172,4 +161,4 @@ public class FastDfsUtils {
             this.path = path;
         }
     }
-}
+}*/
