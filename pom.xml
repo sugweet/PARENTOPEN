@@ -47,6 +47,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
         </dependency>
 
         <!--commons-lang3-->
@@ -126,7 +127,6 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-
     </dependencies>
 
     <!--spring-cloud版本控制-->
@@ -142,16 +142,16 @@
         </dependencies>
     </dependencyManagement>
 
-    <distributionManagement>
-        <!-- 用于上传的仓库 -->
+    <!--<distributionManagement>
+        &lt;!&ndash; 用于上传的仓库 &ndash;&gt;
         <repository>
-            <!-- 这里的id需要和settings.xml中的server的id一致 -->
+            &lt;!&ndash; 这里的id需要和settings.xml中的server的id一致 &ndash;&gt;
             <id>open-nexus</id>
             <name>Open Nexus</name>
-            <!-- 指定自己私服的地址 -->
+            &lt;!&ndash; 指定自己私服的地址 &ndash;&gt;
             <url>http://192.168.157.3:8081/repository/open-repository/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <build>
         <defaultGoal>compile</defaultGoal>
@@ -167,8 +167,8 @@
                 </configuration>
             </plugin>
 
-            <!-- 要将源码放上去，需要加入这个插件 -->
-            <plugin>
+            <!-- 上传到nexus私服中配置 要将源码放上去，需要加入这个插件 -->
+            <!--<plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
@@ -182,7 +182,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
 
         <resources>
