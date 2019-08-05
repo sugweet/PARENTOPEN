@@ -1,6 +1,6 @@
-package com.brigeintelligent.base.baseutils;
+package com.brigeintelligent.base.baseutils.pagesort;
 
-import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -9,22 +9,23 @@ import org.springframework.data.domain.Sort.Order;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Description：分页排序工具类
  * @Author：Sugweet
  * @Time：2019/8/5 17:37
  */
+@Slf4j
 public class PageSortUtils {
 
-    public static PageList getPageList(List<Object> list,Integer pageSize, Integer pageNum, String sortColumn){
-        List<Object> collect = list.stream().skip(pageSize * pageNum).limit(pageSize).collect(Collectors.toList());
-
-        return null;
-    }
-
-    // Jpa排序方法
+    /**
+     * Jpa排序方法
+     *
+     * @param pageSize
+     * @param pageNum
+     * @param sortColumn
+     * @return
+     */
     public static PageRequest getPageRequest(Integer pageSize, Integer pageNum, String sortColumn) {
         Sort sort = PageSortUtils.multiSort(sortColumn);
         if (sort == null) {
@@ -33,7 +34,12 @@ public class PageSortUtils {
         return PageRequest.of(pageNum, pageSize, sort);
     }
 
-    // 获取sort
+    /**
+     * 获取sort
+     *
+     * @param colunms
+     * @return
+     */
     private static Sort multiSort(String... colunms) {
         if (StringUtils.isAllEmpty(colunms)) {
             return null;
@@ -46,11 +52,16 @@ public class PageSortUtils {
 
     }
 
-    // 处理排序规则
+    /**
+     * 处理排序规则
+     *
+     * @param rule
+     * @return
+     */
     private static Order multiOrder(String rule) {
         Order order = null;
         String[] rules = rule.split("_");
-        if (rules.length > 2) {
+        if (rules.length == 2) {
             if ("d".equals(rules[1])) {
                 order = new Order(Direction.DESC, rules[0]);
             } else {
@@ -62,13 +73,16 @@ public class PageSortUtils {
         return order;
     }
 
-    @Data
-    public class PageList {
-        // 总页数
-        private Integer totalPages;
-        // 总条数
-        private Long totalElements;
-        // 分页排序集合
-        private List<Object> objectList;
+    /**
+     * List集合分页排序
+     *
+     * @param <E>
+     */
+    public static class PageSortList<E> {
+
     }
+
+
+
+
 }
