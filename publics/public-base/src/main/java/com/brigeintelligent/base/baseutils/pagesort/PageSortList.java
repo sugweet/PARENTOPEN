@@ -28,12 +28,26 @@ public class PageSortList<E> {
      * @return
      */
     public PageList getPageList(List<E> list, Integer pageSize, Integer pageNum, String sortColumns) {
+
+        // 分页查询
         List<E> collect = list.stream().skip(pageSize * pageNum).limit(pageSize).collect(Collectors.toList());
+//        List<E> collect = new ArrayList<>();
+//        long limit = pageSize;
+//        long toSkip = pageSize * pageNum;
+//        for (E e1 : list) {
+//            if (toSkip > 0) {
+//                toSkip--;
+//                continue;
+//            }
+//            if (limit-- == 0) break;
+//            collect.add(e1);
+//        }
         // 总页数
         int totalPages = list.size() / pageSize;
         if (list.size() % pageSize > 0) {
             totalPages += 1;
         }
+        // sortColumns为空则不排序
         if (StringUtils.isEmpty(sortColumns)) {
 
             return PageList.builder()
@@ -50,15 +64,16 @@ public class PageSortList<E> {
                     String[] split = column.split("_");
                     // 将属性名首字母大写
                     String name = Character.toUpperCase(split[0].charAt(0)) + split[0].substring(1);
-                    Method m1 = ((E) a).getClass().getMethod("get" + name, (Class<?>[]) null);
-                    Method m2 = ((E) b).getClass().getMethod("get" + name, (Class<?>[]) null);
-                    if (split.length == 2 && "d".equals(split[1]))// 倒序
-                        ret = m2.invoke(((E) b), (Object[]) null).toString().compareTo(
-                                m1.invoke(((E) a), (Object[]) null).toString());
+                    Method m1 = (a).getClass().getMethod("get" + name, (Class<?>[]) null);
+                    Method m2 = (b).getClass().getMethod("get" + name, (Class<?>[]) null);
+                    if (split.length == 2 && "d".equals(split[1]))
+                        // 倒序
+                        ret = m2.invoke((b), (Object[]) null).toString().compareTo(
+                                m1.invoke((a), (Object[]) null).toString());
                     else
                         // 正序
-                        ret = m1.invoke(((E) a), (Object[]) null).toString().compareTo(
-                                m2.invoke(((E) b), (Object[]) null).toString());
+                        ret = m1.invoke((a), (Object[]) null).toString().compareTo(
+                                m2.invoke((b), (Object[]) null).toString());
                 } catch (Exception e) {
                     log.error("============list集合分页排序异常", e);
 
