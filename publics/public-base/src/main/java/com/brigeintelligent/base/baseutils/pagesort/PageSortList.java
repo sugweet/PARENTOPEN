@@ -52,7 +52,6 @@ public class PageSortList<E> {
                     String name = Character.toUpperCase(split[0].charAt(0)) + split[0].substring(1);
                     Method m1 = ((E) a).getClass().getMethod("get" + name, (Class<?>[]) null);
                     Method m2 = ((E) b).getClass().getMethod("get" + name, (Class<?>[]) null);
-                    log.info("========length:" + split.length);
                     if (split.length == 2 && "d".equals(split[1]))// 倒序
                         ret = m2.invoke(((E) b), (Object[]) null).toString().compareTo(
                                 m1.invoke(((E) a), (Object[]) null).toString());
@@ -87,8 +86,10 @@ public class PageSortList<E> {
         list.add(student3);
         System.out.println(list);
         PageSortList<Student> sortList = new PageSortList<>();
-        PageList pageList = sortList.getPageList(list, 4, 0, "name_d,age_d");
+        PageList pageList = sortList.getPageList(list, 2, 0, "name_d,age_d");
         System.out.println(pageList.getObjectList());
+        System.out.println(pageList.getTotalElements());
+        System.out.println(pageList.getTotalPages());
 
     }
 }

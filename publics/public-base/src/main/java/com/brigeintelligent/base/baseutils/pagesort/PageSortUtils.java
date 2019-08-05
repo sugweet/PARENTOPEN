@@ -73,16 +73,5 @@ public class PageSortUtils {
         return order;
     }
 
-    /**
-     * List集合分页排序
-     *
-     * @param <E>
-     */
-    public static class PageSortList<E> {
-
-    }
-
-
-
 
 }
