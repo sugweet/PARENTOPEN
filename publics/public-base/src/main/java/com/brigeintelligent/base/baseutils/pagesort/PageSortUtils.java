@@ -23,7 +23,7 @@ public class PageSortUtils {
      *
      * @param pageSize
      * @param pageNum
-     * @param sortColumn
+     * @param sortColumn 倒序时加“_d” 例如：id_d
      * @return
      */
     public static PageRequest getPageRequest(Integer pageSize, Integer pageNum, String sortColumn) {
