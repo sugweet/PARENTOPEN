@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * @ClassName PageSortList
- * @Description List集合分页排序通用工具类（不支持基本类型及其包装类）
+ * @Description List集合分页排序通用工具类
  * @Author Sugweet Chen
  * @Date 2019/8/5 22:52
  * @Version 1.0
