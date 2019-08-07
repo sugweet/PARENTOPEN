@@ -91,10 +91,10 @@ public class PageSortList<E> {
 
     public static void main(String[] args) {
         List<Student> list = new ArrayList<>();
-        Student student = new Student("张小凡", 1);
-        Student student1 = new Student("陆雪琪", 3);
-        Student student2 = new Student("碧瑶", 8);
-        Student student3 = new Student("鬼厉", 2);
+        Student student = new Student("1","张小凡", "1");
+        Student student1 = new Student("2","陆雪琪", "3");
+        Student student2 = new Student("3","碧瑶", "7");
+        Student student3 = new Student("4","鬼厉", "2");
         list.add(student);
         list.add(student1);
         list.add(student2);

@@ -11,12 +11,16 @@ import lombok.Data;
  **/
 @Data
 public class Student {
-
+    private String id;
     private String name;
-    private Integer age;
+    private String age;
 
-    public Student(String name, Integer age) {
+    public Student(String id, String name, String age) {
+        this.id = id;
         this.name = name;
         this.age = age;
+    }
+
+    public Student() {
     }
 }
