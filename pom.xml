@@ -25,7 +25,7 @@
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <fastjson.version>1.2.31</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <swagger2.version>2.8.0</swagger2.version>
         <shiro.version>1.4.1</shiro.version>
         <druid.version>1.1.9</druid.version>
